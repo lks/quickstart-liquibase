@@ -4,28 +4,41 @@
         xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
-    <changeSet id="1" author="nvoxland">
-        <createTable tableName="person">
-            <column name="id" type="int" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
+    <changeSet id="create-table-user" author="jca">
+        <createTable tableName="user">
+            <column name="user_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
             </column>
-            <column name="firstname" type="varchar(50)"/>
-            <column name="lastname" type="varchar(50)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="state" type="char(2)"/>
+            <column name="nickname" type="varchar(255)" />
+            <column name="email" type="varchar(255)" />
         </createTable>
     </changeSet>
-
-    <changeSet id="2" author="nvoxland">
-        <addColumn tableName="person">
-            <column name="username" type="varchar(8)"/>
-        </addColumn>
+    <changeSet id="create-table-quote" author="jca">
+        <createTable tableName="quote">
+            <column name="quote_id" type="int"  autoIncrement="true">
+            <constraints primaryKey="true" nullable="false" />
+        </column>
+            <column name="quote" type="varchar(500)" />
+            <column name="award" type="int" />
+            <column name="user_id" type="int" />
+        </createTable>
     </changeSet>
-    <changeSet id="3" author="nvoxland">
-        <addLookupTable
-                existingTableName="person" existingColumnName="state"
-                newTableName="state" newColumnName="id" newColumnDataType="char(2)"/>
+    <changeSet id="add-FK-quote-user" author="jca">
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="quote"
+                                 constraintName="fk_quote_user"
+                                 referencedColumnNames="user_id"
+                                 referencedTableName="user" />
     </changeSet>
 
+    <changeSet id="add-my-data" author="jca">
+        <insert tableName="user">
+            <column name="nickname" value="lks" />
+            <column name="email" value="lks@lks.com" />
+        </insert>
+        <insert tableName="quote">
+            <column name="quote" value="..." />
+            <column name="award" value="0" />
+        </insert>
+    </changeSet>
 </databaseChangeLog>
